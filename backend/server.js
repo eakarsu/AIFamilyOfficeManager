@@ -70,6 +70,15 @@ app.use('/api/dashboard', require('./routes/dashboard'));
 // Wealth Analytics — custom views (family tree, allocation, net worth, trust flow)
 app.use('/api/custom-views', require('./routes/customViews'));
 
+// Apply pass 7 — family-mission tracker + next-gen education portal + custodian/Plaid stubs
+app.use('/api/family-missions',     require('./routes/familyMissions'));
+app.use('/api/mission-milestones',  require('./routes/missionMilestones'));
+app.use('/api/education-milestones', require('./routes/educationMilestones'));
+app.use('/api/learning-plans',      require('./routes/learningPlans'));
+app.use('/api/nextgen-portal',      require('./routes/nextGenPortal'));
+app.use('/api/integrations',        require('./routes/integrations'));
+app.use('/api/liquidity-ladder',    require('./routes/liquidityLadder'));
+
 app.listen(PORT, () => {
   console.log(`\nAI Family Office Manager API running on http://localhost:${PORT}\n`);
 });

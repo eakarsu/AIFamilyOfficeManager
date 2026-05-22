@@ -496,6 +496,35 @@ async function beneficiaryOnboarding(beneficiary, family, context = {}) {
   return safeJsonParse(r, { summary: typeof r === 'string' ? r : 'No response', onboarding_phases: [] });
 }
 
+// ──────────────────────────────────────────────────────────────
+// AI Verb 17 (pass 7): Philanthropic Grant Scorer
+// Dedicated scorer separated from charitable-impact-report — evaluates a
+// candidate grant against the family's mission / strategy and prior giving.
+// ──────────────────────────────────────────────────────────────
+async function philanthropicGrantScore(family, candidate, priorGifts = [], context = {}) {
+  const sys = `${SYSTEM_PROMPT} Score a candidate philanthropic grant for a family office. Return strict JSON:
+{
+  "grant": { "recipient": string, "amount_usd": number, "cause_area": string },
+  "scores": {
+    "mission_alignment":   { "score": number, "rationale": string },
+    "impact_per_dollar":   { "score": number, "rationale": string },
+    "operational_health":  { "score": number, "rationale": string },
+    "governance_risk":     { "score": number, "rationale": string },
+    "concentration_risk":  { "score": number, "rationale": string }
+  },
+  "composite_score": number,
+  "recommendation": "fund_full"|"fund_partial"|"defer"|"decline",
+  "suggested_amount_usd": number,
+  "conditions": [string],
+  "next_steps": [string],
+  "summary": string
+}
+Score each criterion 0..100. composite_score is a weighted blend (mission 0.3, impact 0.3, ops 0.15, gov 0.15, concentration 0.10).`;
+  const usr = `Family:\n${JSON.stringify(family, null, 2)}\nCandidate grant:\n${JSON.stringify(candidate, null, 2)}\nPrior gifts (last ${priorGifts.length}):\n${JSON.stringify(priorGifts, null, 2)}\nContext: ${JSON.stringify(context)}`;
+  const r = await callOpenRouter(sys, usr);
+  return safeJsonParse(r, { summary: typeof r === 'string' ? r : 'No response', scores: {}, composite_score: 0, recommendation: 'defer' });
+}
+
 module.exports = {
   callOpenRouter,
   safeJsonParse,
@@ -515,4 +544,5 @@ module.exports = {
   familyMeetingAgenda,
   assetAllocationRebalance,
   beneficiaryOnboarding,
+  philanthropicGrantScore,
 };

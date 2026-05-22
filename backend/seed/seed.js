@@ -41,6 +41,11 @@ async function run() {
       DROP TABLE IF EXISTS attachments          CASCADE;
       DROP TABLE IF EXISTS webhooks             CASCADE;
       DROP TABLE IF EXISTS webhook_deliveries   CASCADE;
+
+      DROP TABLE IF EXISTS family_missions      CASCADE;
+      DROP TABLE IF EXISTS mission_milestones   CASCADE;
+      DROP TABLE IF EXISTS education_milestones CASCADE;
+      DROP TABLE IF EXISTS learning_plans       CASCADE;
     `);
 
     console.log('[seed] applying migrations...');
@@ -48,6 +53,8 @@ async function run() {
     await client.query(schema1);
     const schema2 = fs.readFileSync(path.join(__dirname, '..', 'migrations', '002_schema.sql'), 'utf8');
     await client.query(schema2);
+    const schema3 = fs.readFileSync(path.join(__dirname, '..', 'migrations', '003_schema.sql'), 'utf8');
+    await client.query(schema3);
 
     // ──────────────────────────────────────────────
     // families
@@ -578,6 +585,97 @@ async function run() {
     for (const w of webhooks) {
       await client.query(
         `INSERT INTO webhooks (name,url,secret,events,active) VALUES ($1,$2,$3,$4,$5)`, w
+      );
+    }
+
+    // ──────────────────────────────────────────────
+    // Family missions + milestones (Apply pass 7)
+    // ──────────────────────────────────────────────
+    console.log('[seed] inserting family missions...');
+    const missions = [
+      ['MIS-001', 'FAM-001', 'Stewardship through 2050',          'Preserve and grow Vandermeer principal across G2-G4 with disciplined governance, education, and risk controls.', 'stewardship',  2050, 'matriarch',  62, 'active'],
+      ['MIS-002', 'FAM-001', 'Vandermeer Cancer Initiative',      'Sustain $8M/yr in oncology giving with measurable patient-outcome reporting.', 'philanthropy', 2035, 'G2 son',    48, 'active'],
+      ['MIS-003', 'FAM-015', 'Whitfield Foundation perpetuity',   'Stand up a perpetual private foundation funded $200M with disciplined 5% spend rate.', 'philanthropy', 2030, 'Charlotte', 70, 'active'],
+      ['MIS-004', 'FAM-002', 'Okonkwo cross-border continuity',   'Document a clean cross-border framework so G3+ can move UK↔US↔NG without disrupting trust status.', 'unity',       2032, 'patriarch',  35, 'active'],
+      ['MIS-005', 'FAM-006', 'Al-Mansour DIFC branch split',      'Cleanly split the DIFC trust into four branch trusts honouring Sharia majority-male sign-off.', 'enterprise',  2028, 'eldest son', 55, 'active'],
+      ['MIS-006', 'FAM-003', 'Hanazawa heritage 2125',            'Endow Kyoto heritage preservation in perpetuity without triggering JP foundation regulation burden.', 'philanthropy', 2125, 'G1 patriarch', 25, 'active'],
+      ['MIS-007', 'FAM-004', 'Rosenthal G3 education pact',       'Every G3 grandchild completes a Swiss-recognised tertiary degree before first principal distribution.', 'education',  2040, 'Greta',      80, 'active'],
+      ['MIS-008', 'FAM-010', 'Chen Asia-tech leadership',         'Position the family as a top-5 Asia-Pacific LP in early-stage AI / climate tech by 2030.', 'enterprise',  2030, 'G2 daughter', 40, 'active'],
+    ];
+    for (const m of missions) {
+      await client.query(
+        `INSERT INTO family_missions
+           (mission_id, family_id, title, statement, pillar, target_year, owner, progress_pct, status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        m
+      );
+    }
+
+    console.log('[seed] inserting mission milestones...');
+    const missionMilestones = [
+      ['MMS-001', 'MIS-001', 'Ratify family governance charter v4',    '2026-09-01', 'G2 council',  80, 'in_progress'],
+      ['MMS-002', 'MIS-001', 'Run G3 first board observation cycle',   '2027-06-01', 'matriarch',   30, 'in_progress'],
+      ['MMS-003', 'MIS-002', 'Sign 5y MSK partnership agreement',      '2026-12-01', 'G2 son',      55, 'in_progress'],
+      ['MMS-004', 'MIS-003', 'Foundation bylaws v1 ratified',          '2026-05-15', 'Charlotte',  100, 'done'],
+      ['MMS-005', 'MIS-003', 'Hire executive director',                '2026-09-30', 'Charlotte',   40, 'in_progress'],
+      ['MMS-006', 'MIS-004', 'Domicile policy v1 drafted',             '2026-08-01', 'tax counsel', 20, 'open'],
+      ['MMS-007', 'MIS-005', 'Sharia council approval letter',         '2026-11-01', 'eldest son',  10, 'open'],
+      ['MMS-008', 'MIS-005', 'DIFC court branch-trust filing',         '2027-03-15', 'eldest son',   0, 'open'],
+      ['MMS-009', 'MIS-007', 'BEN-003 Phillips Academy graduation',    '2027-05-30', 'Sophia',      60, 'in_progress'],
+      ['MMS-010', 'MIS-008', 'Co-lead first $50M AI series-B',         '2026-12-31', 'G2 daughter', 25, 'open'],
+    ];
+    for (const m of missionMilestones) {
+      await client.query(
+        `INSERT INTO mission_milestones
+           (milestone_id, mission_id, title, due_date, owner, progress_pct, status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+        m
+      );
+    }
+
+    // ──────────────────────────────────────────────
+    // Education milestones (Apply pass 7)
+    // ──────────────────────────────────────────────
+    console.log('[seed] inserting education milestones...');
+    const eduMilestones = [
+      ['EMI-001', 'BEN-003', 'Phillips Academy admission',          'admission',  '2024-09-01', '2024-09-04', 'achieved'],
+      ['EMI-002', 'BEN-003', 'AP Calculus BC',                      'exam',       '2026-05-15', null,         'in_progress'],
+      ['EMI-003', 'BEN-003', 'Princeton early action submission',   'admission',  '2027-11-01', null,         'planned'],
+      ['EMI-004', 'BEN-009', 'IB Diploma — Dubai College',          'graduation', '2028-05-20', null,         'in_progress'],
+      ['EMI-005', 'BEN-009', 'Arabic Heritage scholarship',         'award',      '2026-10-01', null,         'planned'],
+      ['EMI-006', 'BEN-005', 'LSE BSc Economics graduation',        'graduation', '2026-06-30', null,         'in_progress'],
+      ['EMI-007', 'BEN-005', 'Family holding board observation',    'internship', '2026-09-01', null,         'planned'],
+      ['EMI-008', 'BEN-012', 'INSEAD MBA admission',                'admission',  '2025-12-15', '2025-12-22', 'achieved'],
+      ['EMI-009', 'BEN-012', 'INSEAD MBA graduation',               'graduation', '2027-07-15', null,         'in_progress'],
+      ['EMI-010', 'BEN-013', 'St Andrews MA Hons graduation',       'graduation', '2026-06-25', null,         'in_progress'],
+    ];
+    for (const m of eduMilestones) {
+      await client.query(
+        `INSERT INTO education_milestones
+           (emi_id, beneficiary_id, title, category, target_date, achieved_date, status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+        m
+      );
+    }
+
+    // ──────────────────────────────────────────────
+    // Learning plans (Apply pass 7)
+    // ──────────────────────────────────────────────
+    console.log('[seed] inserting learning plans...');
+    const learningPlans = [
+      ['LRN-001', 'BEN-003', 2026, 'AP-heavy load + Stanford summer math camp', 'Dr. Andrews',     85000,  'active'],
+      ['LRN-002', 'BEN-003', 2027, 'College apps + first board observation',    'matriarch',       95000,  'draft'],
+      ['LRN-003', 'BEN-009', 2026, 'IB year 1 + Arabic heritage immersion',     'Sheikha Maryam',  72000,  'active'],
+      ['LRN-004', 'BEN-005', 2026, 'LSE final year + family-office shadow',     'CIO',            110000,  'active'],
+      ['LRN-005', 'BEN-012', 2026, 'INSEAD year 1 — focus on family enterprise','Wei family CFO',  140000,  'active'],
+      ['LRN-006', 'BEN-013', 2026, 'St Andrews final year + Edinburgh internship', 'family advocate', 65000, 'active'],
+    ];
+    for (const p of learningPlans) {
+      await client.query(
+        `INSERT INTO learning_plans
+           (plan_id, beneficiary_id, year, focus, mentor, budget_usd, status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+        p
       );
     }
 

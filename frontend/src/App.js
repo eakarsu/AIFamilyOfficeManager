@@ -48,10 +48,23 @@ import WebhooksPage from './pages/WebhooksPage';
 // Custom views (Wealth Analytics)
 import CustomViewsPage from './pages/CustomViewsPage';
 
+// Apply pass 7 — mission tracker + next-gen portal + integrations + grant scorer
+import FamilyMissionsPage          from './pages/FamilyMissionsPage';
+import MissionMilestonesPage       from './pages/MissionMilestonesPage';
+import EducationMilestonesPage     from './pages/EducationMilestonesPage';
+import LearningPlansPage           from './pages/LearningPlansPage';
+import NextGenPortalPage           from './pages/NextGenPortalPage';
+import IntegrationsPage            from './pages/IntegrationsPage';
+import AIPhilanthropicGrantScorePage from './pages/AIPhilanthropicGrantScorePage';
+import LiquidityLadderPage from './pages/LiquidityLadderPage';
+
 import LoginPage from './pages/LoginPage';
 import { getToken } from './services/api';
 
 import './App.css';
+
+import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
+import CodexOperationsFeature from './pages/CodexOperationsFeature';
 
 function RequireAuth({ children }) {
   const location = useLocation();
@@ -69,6 +82,9 @@ function ShellRoutes() {
         <Topbar />
         <div style={{ padding: '24px 32px' }}>
           <Routes>
+        <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
+        <Route path="/codex/operations" element={<CodexOperationsFeature />} />
+
             <Route path="/" element={<Dashboard />} />
 
             <Route path="/families"             element={<FamiliesPage />} />
@@ -110,6 +126,16 @@ function ShellRoutes() {
             <Route path="/webhooks" element={<WebhooksPage />} />
 
             <Route path="/custom-views" element={<CustomViewsPage />} />
+            <Route path="/liquidity-ladder" element={<LiquidityLadderPage />} />
+
+            {/* Apply pass 7 routes */}
+            <Route path="/family-missions"        element={<FamilyMissionsPage />} />
+            <Route path="/mission-milestones"     element={<MissionMilestonesPage />} />
+            <Route path="/education-milestones"   element={<EducationMilestonesPage />} />
+            <Route path="/learning-plans"         element={<LearningPlansPage />} />
+            <Route path="/nextgen-portal"         element={<NextGenPortalPage />} />
+            <Route path="/integrations"           element={<IntegrationsPage />} />
+            <Route path="/ai/philanthropic-grant-score" element={<AIPhilanthropicGrantScorePage />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

@@ -145,6 +145,15 @@ const SAMPLES = {
     { label: 'Hamish McKinnon (G3 adult)', values: { ben_id: 'BEN-013', context_notes: 'Just turned 21; entering Scots-law trust as named beneficiary; St Andrews student.' } },
     { label: 'Wei Ling Chen (G3 adult)', values: { ben_id: 'BEN-012', context_notes: 'INSEAD MBA candidate; SG resident with US-person status (born in US).' } },
   ],
+
+  // Apply pass 7: dedicated philanthropic grant scorer (split out from charitable-impact-report).
+  'philanthropic-grant-score': [
+    { label: 'Vandermeer — MSK Cancer Center $2M', values: { family_id: 'FAM-001', recipient: 'Memorial Sloan Kettering', amount_usd: 2000000, cause_area: 'cancer research', context_notes: 'Aligns with G1 matriarch oncology focus; org has 4-star Charity Navigator; family has given $11M lifetime.' } },
+    { label: 'Whitfield — KIPP charter network $5M', values: { family_id: 'FAM-015', recipient: 'KIPP Foundation', amount_usd: 5000000, cause_area: 'K-12 education access', context_notes: 'Whitfield Foundation board split on charter schools; CEO turnover Q1; impact studies mixed.' } },
+    { label: 'Bouchard — Fondation de France arts', values: { family_id: 'FAM-009', recipient: 'Fondation de France (arts pool)', amount_usd: 750000, cause_area: 'french cultural heritage', context_notes: 'CLT-eligible; aligns with family mission pillar #2; prior gift $400k in 2023.' } },
+    { label: 'Rosenthal — MSF emergency $25M block', values: { family_id: 'FAM-004', recipient: 'Médecins Sans Frontières', amount_usd: 25000000, cause_area: 'humanitarian medicine', context_notes: 'Appreciated stock gift; would lift MSF to top-3 single-donor exposure (concentration risk).' } },
+    { label: 'Al-Mansour — Sharia-compliant edu $1.2M', values: { family_id: 'FAM-006', recipient: 'Sharjah Heritage Education Initiative', amount_usd: 1200000, cause_area: 'arabic-language education', context_notes: 'New 501(c)-equivalent UAE NGO; governance evidence thin; Sharia overlay positive.' } },
+  ],
 };
 
 // GET /api/ai/samples?feature=<verb>
@@ -522,6 +531,46 @@ router.post('/beneficiary-onboarding', async (req, res) => {
     const ctx = { ...(context || {}), ...(context_notes ? { notes: context_notes } : {}) };
     const result = await ai.beneficiaryOnboarding(ben, fam, ctx);
     await record('beneficiary-onboarding', { ben_id: ben.ben_id, family_id: fam.family_id }, result);
+    res.json(result);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ──────────────────────────────────────────────────────────────
+// 17. philanthropic-grant-score   (Apply pass 7)
+// Dedicated scorer — pulls prior gifts from DB, scores candidate vs mission.
+// ──────────────────────────────────────────────────────────────
+router.post('/philanthropic-grant-score', async (req, res) => {
+  try {
+    const {
+      family_id,
+      recipient,
+      amount_usd,
+      cause_area,
+      candidate,
+      context_notes,
+      context,
+    } = req.body || {};
+    let fam = await loadFamily(family_id);
+    if (!fam) {
+      const r = await pool.query('SELECT * FROM families ORDER BY id ASC LIMIT 1');
+      fam = r.rows[0] || { family_id: family_id || 'FAM-UNKNOWN' };
+    }
+    const cand = candidate || {
+      recipient:   recipient   || null,
+      amount_usd:  amount_usd  != null ? Number(amount_usd) : null,
+      cause_area:  cause_area  || null,
+    };
+    let prior = [];
+    try {
+      const gr = await pool.query(
+        'SELECT recipient, amount_usd, vehicle, ts, status FROM charitable_gifts WHERE family_id = $1 ORDER BY ts DESC NULLS LAST LIMIT 30',
+        [fam.family_id]
+      );
+      prior = gr.rows;
+    } catch (_) { prior = []; }
+    const ctx = { ...(context || {}), ...(context_notes ? { notes: context_notes } : {}) };
+    const result = await ai.philanthropicGrantScore(fam, cand, prior, ctx);
+    await record('philanthropic-grant-score', { family_id: fam.family_id, candidate: cand }, result);
     res.json(result);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

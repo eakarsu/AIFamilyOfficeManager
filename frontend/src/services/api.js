@@ -104,7 +104,7 @@ function crud(base) {
   };
 }
 
-// 18 CRUD APIs
+// 18 CRUD APIs + Apply pass 7 additions
 export const familiesApi           = crud('families');
 export const trustsApi             = crud('trusts');
 export const beneficiariesApi      = crud('beneficiaries');
@@ -123,6 +123,28 @@ export const lpInterestsApi        = crud('lp-interests');
 export const successionPlansApi    = crud('succession-plans');
 export const valuationReportsApi   = crud('valuation-reports');
 export const auditLogApi           = crud('audit-log');
+
+// Apply pass 7 — family-mission tracker + next-gen education portal
+export const familyMissionsApi      = crud('family-missions');
+export const missionMilestonesApi   = crud('mission-milestones');
+export const educationMilestonesApi = crud('education-milestones');
+export const learningPlansApi       = crud('learning-plans');
+
+export const getFamilyMissionKpis    = () => request('/family-missions/kpis');
+export const getMissionsByFamily     = (familyId) => request(`/family-missions/by-family/${encodeURIComponent(familyId)}`);
+
+// Next-gen education portal — read-only aggregated views
+export const listNextGenBeneficiaries = () => request('/nextgen-portal');
+export const getNextGenBundle         = (benId) => request(`/nextgen-portal/${encodeURIComponent(benId)}`);
+
+// Custodian / aggregator integrations (503 until creds configured)
+export const listIntegrations          = () => request('/integrations');
+export const getIntegrationStatus      = (provider) => request(`/integrations/${encodeURIComponent(provider)}/status`);
+export const plaidCreateLinkToken      = (body) => request('/integrations/plaid/link-token',      { method: 'POST', body: JSON.stringify(body || {}) });
+export const plaidExchangePublicToken  = (body) => request('/integrations/plaid/exchange',        { method: 'POST', body: JSON.stringify(body || {}) });
+export const plaidSyncHoldings         = (body) => request('/integrations/plaid/sync-holdings',   { method: 'POST', body: JSON.stringify(body || {}) });
+export const addeparSyncAccounts       = (body) => request('/integrations/addepar/sync-accounts', { method: 'POST', body: JSON.stringify(body || {}) });
+export const canoeSyncAlts             = (body) => request('/integrations/canoe/sync-alts',       { method: 'POST', body: JSON.stringify(body || {}) });
 
 // Dashboard
 export const getDashboardStats = () => request('/dashboard');
@@ -149,6 +171,8 @@ export const aiCharitableImpactReport     = (body) => request('/ai/charitable-im
 export const aiFamilyMeetingAgenda        = (body) => request('/ai/family-meeting-agenda',        { method: 'POST', body: JSON.stringify(body || {}) });
 export const aiAssetAllocationRebalance   = (body) => request('/ai/asset-allocation-rebalance',   { method: 'POST', body: JSON.stringify(body || {}) });
 export const aiBeneficiaryOnboarding      = (body) => request('/ai/beneficiary-onboarding',       { method: 'POST', body: JSON.stringify(body || {}) });
+// Apply pass 7: dedicated philanthropic grant scorer
+export const aiPhilanthropicGrantScore    = (body) => request('/ai/philanthropic-grant-score',    { method: 'POST', body: JSON.stringify(body || {}) });
 
 // AI history
 export const getAIHistory = (feature, limit = 25) => {

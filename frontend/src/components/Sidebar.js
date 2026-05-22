@@ -21,6 +21,7 @@ const TRUSTS_LINKS = [
 const ASSETS_LINKS = [
   { to: '/holdings',            label: 'Holdings' },
   { to: '/illiquid-assets',     label: 'Illiquid Assets' },
+  { to: '/liquidity-ladder',    label: 'Liquidity Ladder' },
   { to: '/real-estate',         label: 'Real Estate' },
   { to: '/art-collection',      label: 'Art Collection' },
   { to: '/private-investments', label: 'Private Investments' },
@@ -35,6 +36,17 @@ const TAX_LINKS = [
 const PHILANTHROPY_LINKS = [
   { to: '/charitable-gifts',    label: 'Charitable Gifts' },
   { to: '/education-grants',    label: 'Education Grants' },
+];
+
+const NEXTGEN_LINKS = [
+  { to: '/nextgen-portal',      label: 'Next-Gen Portal' },
+  { to: '/education-milestones',label: 'Education Milestones' },
+  { to: '/learning-plans',      label: 'Learning Plans' },
+];
+
+const MISSION_LINKS = [
+  { to: '/family-missions',     label: 'Family Missions' },
+  { to: '/mission-milestones',  label: 'Mission Milestones' },
 ];
 
 const GOVERNANCE_LINKS = [
@@ -61,6 +73,7 @@ const AI_REPORTING_LINKS = [
   { to: '/ai/art-provenance-check',        label: 'AI · Art Provenance' },
   { to: '/ai/regulatory-compliance-check', label: 'AI · Compliance Check' },
   { to: '/ai/charitable-impact-report',    label: 'AI · Charitable Impact' },
+  { to: '/ai/philanthropic-grant-score',   label: 'AI · Grant Scorer' },
   { to: '/ai/family-meeting-agenda',       label: 'AI · Meeting Agenda' },
 ];
 
@@ -100,6 +113,16 @@ export default function Sidebar() {
         <NavLink key={l.to} to={l.to}>{l.label}</NavLink>
       ))}
 
+      <div className="sidebar-group-label">Next Generation</div>
+      {NEXTGEN_LINKS.map((l) => (
+        <NavLink key={l.to} to={l.to}>{l.label}</NavLink>
+      ))}
+
+      <div className="sidebar-group-label">Mission Tracker</div>
+      {MISSION_LINKS.map((l) => (
+        <NavLink key={l.to} to={l.to}>{l.label}</NavLink>
+      ))}
+
       <div className="sidebar-group-label">Governance</div>
       {GOVERNANCE_LINKS.map((l) => (
         <NavLink key={l.to} to={l.to}>{l.label}</NavLink>
@@ -120,6 +143,7 @@ export default function Sidebar() {
 
       <div className="sidebar-group-label">Admin</div>
       <NavLink to="/webhooks">Webhooks</NavLink>
+      <NavLink to="/integrations">Integrations</NavLink>
 
       <div className="sidebar-user">
         {user && (
