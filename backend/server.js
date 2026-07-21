@@ -9,6 +9,7 @@ const pool = require('./config/database');
 
 const app = express();
 const PORT = process.env.BACKEND_PORT || 3075;
+const HOST = process.env.HOST || '127.0.0.1';
 
 // Middleware
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
@@ -17,13 +18,13 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3074,ht
 app.use(cors({
   origin: (origin, cb) => {
     if (!origin) return cb(null, true);
-    if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
     return cb(new Error(`Origin ${origin} not allowed by CORS`));
   },
   credentials: true,
 }));
-app.use(express.json({ limit: '20mb' }));
-app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Health check (public)
 app.get('/api/health', (req, res) => {
@@ -35,6 +36,14 @@ app.use('/api/auth', require('./routes/auth'));
 
 // Everything below this line requires a Bearer token.
 app.use('/api', authenticateToken);
+
+// Supported tenant-scoped approval and reconciliation boundary. It only
+// records external outcomes and has no endpoint that can move funds.
+app.use('/api/governed-decisions', require('./routes/governedDecisions'));
+
+if (process.env.ENABLE_LEGACY_ROUTES !== 'true') {
+  app.use('/api', (req, res) => res.status(404).json({ error: 'Legacy routes are disabled; use /api/governed-decisions' }));
+}
 
 // CRUD routes — 18 entities
 app.use('/api/families',            require('./routes/families'));
@@ -79,6 +88,12 @@ app.use('/api/nextgen-portal',      require('./routes/nextGenPortal'));
 app.use('/api/integrations',        require('./routes/integrations'));
 app.use('/api/liquidity-ladder',    require('./routes/liquidityLadder'));
 
-app.listen(PORT, () => {
-  console.log(`\nAI Family Office Manager API running on http://localhost:${PORT}\n`);
+app.use((err, req, res, next) => {
+  console.error('Request failed:', err.message);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+app.listen(PORT, HOST, () => {
+  console.log(`\nAI Family Office Manager API running on http://${HOST}:${PORT}`);
+  console.log(`Legacy routes: ${process.env.ENABLE_LEGACY_ROUTES === 'true' ? 'enabled' : 'disabled'}\n`);
 });

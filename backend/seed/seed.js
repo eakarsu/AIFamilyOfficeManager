@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
+const { hashPassword } = require('../services/passwords');
 require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 
 const pool = new Pool({
@@ -55,6 +56,8 @@ async function run() {
     await client.query(schema2);
     const schema3 = fs.readFileSync(path.join(__dirname, '..', 'migrations', '003_schema.sql'), 'utf8');
     await client.query(schema3);
+    const schema4 = fs.readFileSync(path.join(__dirname, '..', 'migrations', '004_governed_decision_workflow.sql'), 'utf8');
+    await client.query(schema4);
 
     // ──────────────────────────────────────────────
     // families
@@ -546,14 +549,16 @@ async function run() {
     // RBAC users
     // ──────────────────────────────────────────────
     console.log('[seed] inserting users...');
+    const tenantId = process.env.SEED_TENANT_ID || 'family-office-demo';
     const users = [
-      ['admin@familyoffice.io',    'admin123',    'Family Office Admin',    'admin'],
-      ['advisor@familyoffice.io',  'advisor123',  'Senior Advisor',         'advisor'],
-      ['viewer@familyoffice.io',   'viewer123',   'Family Viewer',          'viewer'],
+      ['admin@familyoffice.io',   hashPassword(process.env.DEMO_ADMIN_PASSWORD || 'FamilyOfficeAdmin123!'),   'Family Office Admin', 'admin'],
+      ['advisor@familyoffice.io', hashPassword(process.env.DEMO_MANAGER_PASSWORD || 'FamilyOfficeAdvisor123!'), 'Senior Advisor',      'advisor'],
+      ['viewer@familyoffice.io',  hashPassword(process.env.DEMO_VIEWER_PASSWORD || 'FamilyOfficeViewer123!'),  'Family Viewer',        'viewer'],
     ];
     for (const u of users) {
       await client.query(
-        `INSERT INTO users (email,password,name,role) VALUES ($1,$2,$3,$4)`, u
+        `INSERT INTO users (email,password_hash,name,role,tenant_id) VALUES ($1,$2,$3,$4,$5)`,
+        [...u, tenantId]
       );
     }
 
