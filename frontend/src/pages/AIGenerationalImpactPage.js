@@ -13,7 +13,7 @@ export default function AIGenerationalImpactPage() {
         { key: 'decision',      label: 'Decision',      type: 'textarea', placeholder: 'e.g. Sell Vandermeer Holdings LLC for $185M cash now vs hold 10y.' },
         { key: 'context_notes', label: 'Context Notes', type: 'textarea' },
       ]}
-      run={(v) => aiGenerationalImpact({ family_id: v.family_id, decision: v.decision, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiGenerationalImpact({ family_id: v.family_id, decision: v.decision, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }

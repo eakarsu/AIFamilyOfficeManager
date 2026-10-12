@@ -13,7 +13,7 @@ export default function AIBeneficiaryOnboardingPage() {
         { key: 'family_id',     label: 'Family ID',      placeholder: 'e.g. FAM-001 (optional, inferred from beneficiary)' },
         { key: 'context_notes', label: 'Context Notes',  type: 'textarea' },
       ]}
-      run={(v) => aiBeneficiaryOnboarding({ ben_id: v.ben_id, family_id: v.family_id, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiBeneficiaryOnboarding({ ben_id: v.ben_id, family_id: v.family_id, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }

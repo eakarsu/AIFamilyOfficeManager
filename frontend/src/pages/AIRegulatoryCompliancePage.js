@@ -13,9 +13,9 @@ export default function AIRegulatoryCompliancePage() {
         { key: 'jurisdictions', label: 'Jurisdictions (comma-list)',  type: 'textarea', placeholder: 'e.g. United States, Connecticut, Cayman Islands' },
         { key: 'context_notes', label: 'Context Notes',               type: 'textarea' },
       ]}
-      run={(v) => {
+      run={(v, requestOptions) => {
         const list = (v.jurisdictions || '').split(',').map((s) => s.trim()).filter(Boolean);
-        return aiRegulatoryComplianceCheck({ family_id: v.family_id, jurisdictions: list, context_notes: v.context_notes });
+        return aiRegulatoryComplianceCheck({ family_id: v.family_id, jurisdictions: list, context_notes: v.context_notes }, requestOptions);
       }}
     />
   );

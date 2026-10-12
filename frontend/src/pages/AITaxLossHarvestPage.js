@@ -12,7 +12,7 @@ export default function AITaxLossHarvestPage() {
         { key: 'family_id',     label: 'Family ID (optional)', placeholder: 'e.g. FAM-001' },
         { key: 'context_notes', label: 'Context Notes',        type: 'textarea', placeholder: 'YTD realised gains to offset, wash-sale concerns, etc.' },
       ]}
-      run={(v) => aiTaxLossHarvest({ family_id: v.family_id, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiTaxLossHarvest({ family_id: v.family_id, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }

@@ -13,7 +13,7 @@ export default function AICharitableImpactPage() {
         { key: 'period',        label: 'Period',        placeholder: 'e.g. 2025 calendar' },
         { key: 'context_notes', label: 'Context Notes', type: 'textarea' },
       ]}
-      run={(v) => aiCharitableImpactReport({ family_id: v.family_id, period: v.period, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiCharitableImpactReport({ family_id: v.family_id, period: v.period, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }

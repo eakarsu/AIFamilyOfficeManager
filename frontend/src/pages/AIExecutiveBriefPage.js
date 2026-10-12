@@ -11,7 +11,7 @@ export default function AIExecutiveBriefPage() {
       inputs={[
         { key: 'notes', label: 'Bias / Focus Notes', type: 'textarea', placeholder: 'Optional — bias the brief toward a particular family, region or topic.' },
       ]}
-      run={(v) => aiExecutiveBrief({ notes: v.notes })}
+      run={(v, requestOptions) => aiExecutiveBrief({ notes: v.notes }, requestOptions)}
     />
   );
 }

@@ -75,7 +75,7 @@ const SAMPLES = {
   ],
 
   'tax-loss-harvest': [
-    { label: 'Default — sample across all families', values: { context_notes: 'Use the loaded holdings table; assume short-term gains $4M already realized YTD to offset.' } },
+    { label: 'Vandermeer — sample holdings review', values: { family_id: 'FAM-001', context_notes: 'Use the loaded holdings table; assume short-term gains $4M already realized YTD to offset.' } },
     { label: 'Vandermeer focus', values: { family_id: 'FAM-001', context_notes: 'Look at AAPL, BRK.B losers if any; lots > 1y preferred; coordinate with charitable stock gifts.' } },
     { label: 'Chen — Singapore', values: { family_id: 'FAM-010', context_notes: 'SG resident — no capital gains tax, but G1 daughter is US person; harvest only in US-taxable accounts.' } },
     { label: 'Bouchard — France IFI', values: { family_id: 'FAM-009', context_notes: 'IFI applies on real estate not securities; harvest is about capital gain offsets not wealth tax.' } },
@@ -139,11 +139,11 @@ const SAMPLES = {
   ],
 
   'beneficiary-onboarding': [
-    { label: 'Sophia Vandermeer (G3 minor)', values: { ben_id: 'BEN-003', context_notes: '15yo entering Phillips Academy; G3 minor onboarding for future trust beneficiary status at 21.' } },
-    { label: 'Fatima Al-Mansour (G3 minor)', values: { ben_id: 'BEN-009', context_notes: 'Granddaughter to G1 patriarch; first female G3 to receive direct DIFC trust interest; Sharia overlay needed.' } },
-    { label: 'Chukwuemeka Okonkwo (G2 adult)', values: { ben_id: 'BEN-005', context_notes: 'G2 son finishing LSE; expected to take board seat in family holding co next year.' } },
-    { label: 'Hamish McKinnon (G3 adult)', values: { ben_id: 'BEN-013', context_notes: 'Just turned 21; entering Scots-law trust as named beneficiary; St Andrews student.' } },
-    { label: 'Wei Ling Chen (G3 adult)', values: { ben_id: 'BEN-012', context_notes: 'INSEAD MBA candidate; SG resident with US-person status (born in US).' } },
+    { label: 'Sophia Vandermeer (G3 minor)', values: { ben_id: 'BEN-003', family_id: 'FAM-001', context_notes: '15yo entering Phillips Academy; G3 minor onboarding for future trust beneficiary status at 21.' } },
+    { label: 'Fatima Al-Mansour (G3 minor)', values: { ben_id: 'BEN-009', family_id: 'FAM-006', context_notes: 'Granddaughter to G1 patriarch; first female G3 to receive direct DIFC trust interest; Sharia overlay needed.' } },
+    { label: 'Chukwuemeka Okonkwo (G2 adult)', values: { ben_id: 'BEN-005', family_id: 'FAM-002', context_notes: 'G2 son finishing LSE; expected to take board seat in family holding co next year.' } },
+    { label: 'Hamish McKinnon (G3 adult)', values: { ben_id: 'BEN-013', family_id: 'FAM-011', context_notes: 'Just turned 21; entering Scots-law trust as named beneficiary; St Andrews student.' } },
+    { label: 'Wei Ling Chen (G3 adult)', values: { ben_id: 'BEN-012', family_id: 'FAM-010', context_notes: 'INSEAD MBA candidate; SG resident with US-person status (born in US).' } },
   ],
 
   // Apply pass 7: dedicated philanthropic grant scorer (split out from charitable-impact-report).

@@ -12,7 +12,7 @@ export default function AISuccessionReadinessPage() {
         { key: 'family_id',     label: 'Family ID',     placeholder: 'e.g. FAM-001' },
         { key: 'context_notes', label: 'Context Notes', type: 'textarea' },
       ]}
-      run={(v) => aiSuccessionReadiness({ family_id: v.family_id, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiSuccessionReadiness({ family_id: v.family_id, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }

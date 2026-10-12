@@ -15,13 +15,13 @@ export default function AIArtProvenancePage() {
         { key: 'claimed_provenance', label: 'Claimed Provenance', type: 'textarea' },
         { key: 'context_notes',      label: 'Context Notes', type: 'textarea' },
       ]}
-      run={(v) => aiArtProvenanceCheck({
+      run={(v, requestOptions) => aiArtProvenanceCheck({
         art_id: v.art_id,
         work_title: v.work_title,
         artist: v.artist,
         claimed_provenance: v.claimed_provenance,
         context_notes: v.context_notes,
-      })}
+      }, requestOptions)}
     />
   );
 }

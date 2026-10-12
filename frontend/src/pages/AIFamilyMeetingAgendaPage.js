@@ -13,7 +13,7 @@ export default function AIFamilyMeetingAgendaPage() {
         { key: 'themes',        label: 'Themes',    type: 'textarea', placeholder: 'e.g. 2026 sunset planning, IPS amendment, Q2 distributions.' },
         { key: 'context_notes', label: 'Context Notes', type: 'textarea' },
       ]}
-      run={(v) => aiFamilyMeetingAgenda({ family_id: v.family_id, themes: v.themes, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiFamilyMeetingAgenda({ family_id: v.family_id, themes: v.themes, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }

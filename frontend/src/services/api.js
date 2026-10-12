@@ -156,24 +156,24 @@ export const login = (email, password) =>
 export const getMe = () => request('/auth/me');
 
 // AI endpoints — 16 verbs
-export const aiEstateTaxScenario          = (body) => request('/ai/estate-tax-scenario',          { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiTrustDistributionSuggest   = (body) => request('/ai/trust-distribution-suggest',   { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiIlliquidValuationBand      = (body) => request('/ai/illiquid-valuation-band',      { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiCharitableVehicleRecommend = (body) => request('/ai/charitable-vehicle-recommend', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiExecutiveBrief             = (body) => request('/ai/executive-brief',              { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiGovernanceMemoDraft        = (body) => request('/ai/governance-memo-draft',        { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiSuccessionReadiness        = (body) => request('/ai/succession-readiness',         { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiTaxLossHarvest             = (body) => request('/ai/tax-loss-harvest',             { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiGenerationalImpact         = (body) => request('/ai/generational-impact',          { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiArtProvenanceCheck         = (body) => request('/ai/art-provenance-check',         { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiEducationDistributionRule  = (body) => request('/ai/education-distribution-rule',  { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiRegulatoryComplianceCheck  = (body) => request('/ai/regulatory-compliance-check',  { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiCharitableImpactReport     = (body) => request('/ai/charitable-impact-report',     { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiFamilyMeetingAgenda        = (body) => request('/ai/family-meeting-agenda',        { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiAssetAllocationRebalance   = (body) => request('/ai/asset-allocation-rebalance',   { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiBeneficiaryOnboarding      = (body) => request('/ai/beneficiary-onboarding',       { method: 'POST', body: JSON.stringify(body || {}) });
+export const aiEstateTaxScenario          = (body, options = {}) => request('/ai/estate-tax-scenario',          { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiTrustDistributionSuggest   = (body, options = {}) => request('/ai/trust-distribution-suggest',   { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiIlliquidValuationBand      = (body, options = {}) => request('/ai/illiquid-valuation-band',      { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiCharitableVehicleRecommend = (body, options = {}) => request('/ai/charitable-vehicle-recommend', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiExecutiveBrief             = (body, options = {}) => request('/ai/executive-brief',              { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiGovernanceMemoDraft        = (body, options = {}) => request('/ai/governance-memo-draft',        { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiSuccessionReadiness        = (body, options = {}) => request('/ai/succession-readiness',         { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiTaxLossHarvest             = (body, options = {}) => request('/ai/tax-loss-harvest',             { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiGenerationalImpact         = (body, options = {}) => request('/ai/generational-impact',          { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiArtProvenanceCheck         = (body, options = {}) => request('/ai/art-provenance-check',         { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiEducationDistributionRule  = (body, options = {}) => request('/ai/education-distribution-rule',  { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiRegulatoryComplianceCheck  = (body, options = {}) => request('/ai/regulatory-compliance-check',  { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiCharitableImpactReport     = (body, options = {}) => request('/ai/charitable-impact-report',     { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiFamilyMeetingAgenda        = (body, options = {}) => request('/ai/family-meeting-agenda',        { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiAssetAllocationRebalance   = (body, options = {}) => request('/ai/asset-allocation-rebalance',   { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiBeneficiaryOnboarding      = (body, options = {}) => request('/ai/beneficiary-onboarding',       { ...options, method: 'POST', body: JSON.stringify(body || {}) });
 // Apply pass 7: dedicated philanthropic grant scorer
-export const aiPhilanthropicGrantScore    = (body) => request('/ai/philanthropic-grant-score',    { method: 'POST', body: JSON.stringify(body || {}) });
+export const aiPhilanthropicGrantScore    = (body, options = {}) => request('/ai/philanthropic-grant-score',    { ...options, method: 'POST', body: JSON.stringify(body || {}) });
 
 // AI history
 export const getAIHistory = (feature, limit = 25) => {

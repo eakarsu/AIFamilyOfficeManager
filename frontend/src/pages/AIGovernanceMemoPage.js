@@ -13,7 +13,7 @@ export default function AIGovernanceMemoPage() {
         { key: 'topic',         label: 'Memo Topic',    type: 'textarea', placeholder: 'e.g. Amend IPS v2.0 to raise illiquid allocation cap from 25% → 35%.' },
         { key: 'context_notes', label: 'Context Notes', type: 'textarea' },
       ]}
-      run={(v) => aiGovernanceMemoDraft({ family_id: v.family_id, topic: v.topic, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiGovernanceMemoDraft({ family_id: v.family_id, topic: v.topic, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }

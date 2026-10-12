@@ -13,7 +13,7 @@ export default function AICharitableVehiclePage() {
         { key: 'goals',         label: 'Philanthropic Goals', type: 'textarea', placeholder: 'e.g. Sustain $8M/year giving across education and cancer research.' },
         { key: 'context_notes', label: 'Context Notes', type: 'textarea' },
       ]}
-      run={(v) => aiCharitableVehicleRecommend({ family_id: v.family_id, goals: v.goals, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiCharitableVehicleRecommend({ family_id: v.family_id, goals: v.goals, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }

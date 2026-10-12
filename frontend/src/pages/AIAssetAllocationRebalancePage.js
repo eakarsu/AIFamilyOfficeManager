@@ -14,12 +14,12 @@ export default function AIAssetAllocationRebalancePage() {
         { key: 'target_allocation',  label: 'Target Allocation (JSON object)',  type: 'textarea', placeholder: '{"public_equity":0.30,"fixed_income":0.22,...}' },
         { key: 'context_notes',      label: 'Context Notes',      type: 'textarea' },
       ]}
-      run={(v) => aiAssetAllocationRebalance({
+      run={(v, requestOptions) => aiAssetAllocationRebalance({
         family_id: v.family_id,
         current_allocation: v.current_allocation,
         target_allocation: v.target_allocation,
         context_notes: v.context_notes,
-      })}
+      }, requestOptions)}
     />
   );
 }

@@ -15,13 +15,13 @@ export default function AIPhilanthropicGrantScorePage() {
         { key: 'cause_area',    label: 'Cause Area',    placeholder: 'e.g. cancer research' },
         { key: 'context_notes', label: 'Context Notes', type: 'textarea' },
       ]}
-      run={(v) => aiPhilanthropicGrantScore({
+      run={(v, requestOptions) => aiPhilanthropicGrantScore({
         family_id:  v.family_id,
         recipient:  v.recipient,
         amount_usd: Number(v.amount_usd || 0),
         cause_area: v.cause_area,
         context_notes: v.context_notes,
-      })}
+      }, requestOptions)}
     />
   );
 }

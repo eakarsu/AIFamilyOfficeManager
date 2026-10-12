@@ -13,7 +13,7 @@ export default function AIEstateTaxScenarioPage() {
         { key: 'scenario',      label: 'Scenario',      type: 'textarea', placeholder: 'e.g. Model the 2026 federal sunset impact without further planning.' },
         { key: 'context_notes', label: 'Context Notes', type: 'textarea', placeholder: 'Residency, current exemptions used, structures already in place.' },
       ]}
-      run={(v) => aiEstateTaxScenario({ family_id: v.family_id, scenario: v.scenario, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiEstateTaxScenario({ family_id: v.family_id, scenario: v.scenario, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }

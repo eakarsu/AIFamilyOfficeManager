@@ -13,7 +13,7 @@ export default function AITrustDistributionPage() {
         { key: 'period',        label: 'Period',        placeholder: 'e.g. 2026-Q2' },
         { key: 'context_notes', label: 'Context Notes', type: 'textarea', placeholder: 'HEMS standard, special requests, governance overlays.' },
       ]}
-      run={(v) => aiTrustDistributionSuggest({ trust_id: v.trust_id, period: v.period, context_notes: v.context_notes })}
+      run={(v, requestOptions) => aiTrustDistributionSuggest({ trust_id: v.trust_id, period: v.period, context_notes: v.context_notes }, requestOptions)}
     />
   );
 }
