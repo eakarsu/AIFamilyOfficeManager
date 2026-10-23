@@ -40,7 +40,23 @@ function buildCrud({ table, fields, idPrefix = '', webhookPrefix = null }) {
   router.get('/', async (req, res) => {
     try {
       const r = await pool.query(`SELECT * FROM ${table} ORDER BY id DESC`);
-      res.json(r.rows);
+      const { filterRecords, toCSV } = require('./featurePack');
+      const rows = filterRecords(r.rows, req.query);
+      if (req.query.format === 'csv' || req.query.format === 'json') {
+        if (req.query.format === 'csv') { res.setHeader('Content-Type','text/csv'); res.setHeader('Content-Disposition','attachment; filename="export.csv"'); return res.send(toCSV(rows)); }
+        res.setHeader('Content-Disposition','attachment; filename="export.json"'); return res.json(rows);
+      }
+      res.json(rows);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  router.get('/export', async (req, res) => {
+    try {
+      const r = await pool.query(`SELECT * FROM ${table} ORDER BY id DESC`);
+      const { filterRecords, toCSV } = require('./featurePack');
+      const rows = filterRecords(r.rows, req.query);
+      if (String(req.query.format||'csv').toLowerCase() === 'csv') { res.setHeader('Content-Type','text/csv'); res.setHeader('Content-Disposition','attachment; filename="export.csv"'); return res.send(toCSV(rows)); }
+      return res.json(rows);
     } catch (e) { res.status(500).json({ error: e.message }); }
   });
 

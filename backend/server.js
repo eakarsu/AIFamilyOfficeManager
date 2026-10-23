@@ -40,6 +40,8 @@ app.use('/api', authenticateToken);
 // Supported tenant-scoped approval and reconciliation boundary. It only
 // records external outcomes and has no endpoint that can move funds.
 app.use('/api/governed-decisions', require('./routes/governedDecisions'));
+app.use('/api/tasks', require('./routes/featurePack').tasksRouter);
+app.use('/api/feature-pack', require('./routes/featurePack').router);
 
 if (process.env.ENABLE_LEGACY_ROUTES !== 'true') {
   app.use('/api', (req, res) => res.status(404).json({ error: 'Legacy routes are disabled; use /api/governed-decisions' }));
